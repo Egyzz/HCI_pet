@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+   
+    <meta charset="UTF-8">
+    <meta name="theme-color">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puppy - Жаргалтай нөхөр</title>
+    <meta name="description" content="Pet, гэрийн тэжээвэр амьтан, found pet, report pet, adopt pet">
+   
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&display=swap"
+        rel="stylesheet">'
+    <link rel="stylesheet" href="../css/rating.css">
+
+
+</head>
+
+<body>
+
+<main>
+    <nav>
+        <a href="index.html"> <img src="../assets/logo.png" alt="Logo"></a>
+      
+        <ul class="nav-links">
+            <li><a href="rating.html">Үнэлэх, санал өгөх</a></li>
+            <li><a href="ad-zar.html">Зар оруулах</a></li>
+            <li><a class="darkmode">Нүдэнд ээлтэй</a></li>
+        </ul>
+        
+        <button class="signin-button"><a href="sign-in.html">admin@gmail.com</a></button>
+    </nav>
+    <section class="container">
+
+   <h1>Үнэлэх, санал өгөх хэсэг</h1>
+   <p>Та доорх формыг бөглөн саналаа өгөөрэй</p>
+<form id="reviewForm" action="submit_review.php" method="post">
+    <div class="stars" id="starRating">
+        <span class="star" data-value="1">&#9733;</span>
+        <span class="star" data-value="2">&#9733;</span>
+        <span class="star" data-value="3">&#9733;</span>
+        <span class="star" data-value="4">&#9733;</span>
+        <span class="star" data-value="5">&#9733;</span>
+    </div>
+    
+    <input type="hidden" id="selectedStar" name="star_number" value="0">
+    <label for="username">Таны нэр:</label><br>
+    <input type="text" id="username" name="username" required placeholder="Хэрэглэгчийн нэрээ оруулна уу...">
+    
+  
+
+    <br><br>
+    <label for="comment">Сэтгэгдэл:</label><br>
+    <textarea id="comment" name="comment" rows="4" cols="50" placeholder="Та сэтгэгдлээ үлдээнэ үү..."></textarea><br>
+    <br>
+    <input type="submit" value="Submit Review" >
+</form><br>
+
+<div id="reviewsContainer"></div>
+<div id="reviewsContainer"></div>
+<button id="sortButton">Одоор шүүх</button>
+
+
+<script>
+
+    // star unelgeenii heseg
+    const stars = document.querySelectorAll('.star');
+    const starRating = document.getElementById('starRating');
+    const selectedStar = document.getElementById('selectedStar');
+
+    stars.forEach(star => {
+        star.addEventListener('mouseover', () => {
+            highlightStars(star.dataset.value);
+        });
+
+        star.addEventListener('click', () => {
+            selectedStar.value = star.dataset.value;
+            highlightStars(star.dataset.value);
+        });
+
+        star.addEventListener('mouseout', () => {
+            const rating = selectedStar.value;
+            highlightStars(rating);
+        });
+    });
+
+    function highlightStars(value) {
+        stars.forEach(star => {
+            if (star.dataset.value <= value) {
+                star.style.color = 'gold';
+            } else {
+                star.style.color = 'black';
+            }
+        });
+    }
+
+    // Fetch hiih
+document.addEventListener('DOMContentLoaded', () => {
+    fetchReviews();
+});
+
+function fetchReviews(sort = '') {
+    let url = 'fetch_reviews.php';
+    if (sort) {
+        url += `?sort=${sort}`;
+    }
+    
+    fetch(url)
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('reviewsContainer').innerHTML = data;
+        })
+        .catch(error => console.error('Error fetching reviews:', error));
+}
+
+// Sorting button event listener
+document.getElementById('sortButton').addEventListener('click', () => {
+    fetchReviews('star');
+});
+
+</script>
+</section>
+</main>
+
+    <footer>
+        <div class="miniHelp">
+            <section>
+                <h3>HappiPawz гэж юу вэ?</h3>
+                <ul>
+                    <li><a href="#about.html">Тухай</a></li>
+                    <li><a href="#faq.html">Түгээмэл асуултууд</a></li>
+                    <li><a href="#help.html">Туслах</a></li>
+                </ul>
+            </section>
+            <section>
+                <h3>Харилцагч байгууллагууд</h3>
+                <ul>
+                    <li><a href="#">Дэмжигч</a></li>
+                    <li><a href="#">Асрах үйлчилгээ</a></li>
+                    <li><a href="#">Амьтны хэрэгслийн дэлгүүр</a></li>
+                    <li><a href="#">Эмнэлэг</a></li>
+                </ul>
+            </section>
+            <section>
+                <h3>Бидэнтэй холбогдох</h3>
+                <address>Хаяг: doloremque laudantium, to</address>
+                <p>Холбоо барих: 9999-9999</p>
+            </section>
+        </div>
+        <div class="contactLogo">
+            <a href="facebook.com"><img src="../assets/fb.png" alt="Logo"></a>
+            <a href="youtube.com"><img src="../assets/yt.png" alt="Logo"></a>
+            <a href="instagram.com"><img src="../assets/ig.png" alt="Logo"></a>
+        </div>
+        <div class="terms">
+            <p>Use of this service, website, or application constitutes acceptance of all terms listed above. © 2023, HappiPawz Inc. All rights reserved.</p>
+            <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        </div>
+    </footer>
+    <script src="../js/darkmode.js"></script>
+
+</body>
+
+</html>
